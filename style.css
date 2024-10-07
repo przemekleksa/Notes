@@ -10,3 +10,27 @@ body {
     padding: 20px;
     
 }
+
+header {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+header div:first-child{
+    display: flex;
+    gap: 8px;
+}
+
+.imageWrapper {
+    display: flex;
+    justify-content: center;
+    place-items: center;
+}
+
+
+h1 {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+}
