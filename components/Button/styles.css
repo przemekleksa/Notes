@@ -1,0 +1,24 @@
+.button {
+  padding: 8px 16px;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid #BCBCBD;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.button:hover {
+    background: #E7E7E7;
+}
+
+.button:active {
+    background: #BDBDBD;
+}
+
+.button .label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+}
