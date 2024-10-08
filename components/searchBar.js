@@ -19,7 +19,7 @@ class SearchBar extends HTMLElement {
                     text-indent: 26px;
                     background-size: 24px 24px;
                     background-position: left 10px center;
-                    margin-bottom: 20px;
+                    margin-bottom: 24px;
                 }
             </style>
             <input type="text" id="search-input" placeholder="Search notes...">
