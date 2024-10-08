@@ -4,10 +4,11 @@ class Button extends HTMLElement {
     this.attachShadow({ mode: "open" });
     this.isSecondary = false;
     this.label = "";
+    this.fullWidth = false;
   }
 
   static get observedAttributes() {
-    return ["secondary", "label"];
+    return ["secondary", "label", "fullWidth"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -19,6 +20,11 @@ class Button extends HTMLElement {
     if (name === "label") {
       this.label = newValue || "";
       this.updateLabel();
+    }
+
+    if (name === "fullWidth") {
+      this.fullWidth = newValue !== null;
+      this.updateFullWidth;
     }
   }
 
@@ -46,6 +52,7 @@ class Button extends HTMLElement {
         style.textContent = css;
         this.shadowRoot.querySelectorAll("style").forEach((el) => el.remove());
         this.shadowRoot.appendChild(style);
+        this.updateFullWidth();
       });
   }
 
@@ -56,12 +63,23 @@ class Button extends HTMLElement {
         this.shadowRoot.querySelectorAll("button").forEach((el) => el.remove());
         this.shadowRoot.innerHTML += html;
         this.updateLabel();
+        this.updateFullWidth();
       });
   }
 
   updateLabel() {
     const labelElement = this.shadowRoot.querySelector(".label");
     labelElement && (labelElement.textContent = this.label);
+  }
+
+  updateFullWidth() {
+    const buttonElement = this.shadowRoot.querySelector("button");
+    const labelElement = this.shadowRoot.querySelector(".label");
+
+    if (buttonElement && labelElement) {
+      buttonElement.style.width = this.fullWidth ? "" : "100%";
+      labelElement.style.width = this.fullWidth ? "" : "100%";
+    }
   }
 }
 

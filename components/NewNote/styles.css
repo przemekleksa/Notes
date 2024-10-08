@@ -21,8 +21,14 @@
     text-align: left;
 }
 
-.newNote .header .cancelBtn {
+.newNote .header .cancel {
+    font-size: 14px;
     font-weight: 400;
     line-height: 23.8px;
-    text-align: left;
+    color: #0F75B8;
+}
+
+.newNote .header .cancel:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }

@@ -1,0 +1,8 @@
+.notes-list-container {
+    display: flex;
+    gap: 16px;
+    padding: 0 16px;
+    /* margin-top: 24px; */
+    /* height: 200px; */
+    flex-direction: column;
+}
