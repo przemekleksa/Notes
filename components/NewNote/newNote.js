@@ -25,6 +25,7 @@ class NewNote extends HTMLElement {
       const inputField = document.createElement("note-input-field");
       const textareaField = document.createElement("note-textarea-field");
       const saveBtn = this.shadowRoot.querySelector("#save");
+      const cancelBtn = this.shadowRoot.querySelector("#cancel");
 
       container.insertBefore(inputField, saveBtn);
       container.insertBefore(textareaField, saveBtn);
@@ -34,25 +35,38 @@ class NewNote extends HTMLElement {
         const content = textareaField.value;
         if (title && content) {
           const noteId = Math.floor(Math.random() * 1000000 + 1);
-          this.saveNote({ title, content, noteId });
+          const timestamp = Date.now();
+          this.saveNote({ title, content, noteId, timestamp });
           inputField.value = "";
           textareaField.value = "";
-          this.removeNewNoteForm();
+          this.hideNewNoteForm();
         } else {
           alert("Please fill in both fields.");
         }
       });
+
+      cancelBtn.addEventListener("click", () => {
+        this.hideNewNoteForm();
+      });
     }
   }
 
+  getNotes() {
+    return JSON.parse(localStorage.getItem("notes")) || [];
+  }
+
   saveNote(note) {
-    const notes = JSON.parse(localStorage.getItem("notes")) || [];
+    const notes = this.getNotes();
     notes.push(note);
     localStorage.setItem("notes", JSON.stringify(notes));
   }
 
-  removeNewNoteForm() {
-    this.remove();
+  hideNewNoteForm() {
+    this.shadowRoot.host.style.display = "none";
+    const notesList = document.querySelector("notes-list");
+    if (notesList) {
+      notesList.showAddNewButton();
+    }
   }
 }
 
