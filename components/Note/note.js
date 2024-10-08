@@ -62,6 +62,11 @@ class Note extends HTMLElement {
     const editIcon = document.createElement("img");
     editIcon.src = "assets/edit.svg";
     editIcon.alt = "edit note";
+    editIcon.addEventListener("click", () => {
+      if (this.editNoteCallback) {
+        this.editNoteCallback();
+      }
+    });
 
     const removeIcon = document.createElement("img");
     removeIcon.src = "assets/remove.svg";
