@@ -2,16 +2,21 @@ class NotesList extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.loadStyles();
 
-    fetch("components/NotesList/styles.css")
-      .then((response) => response.text())
-      .then((css) => {
-        const style = document.createElement("style");
-        style.textContent = css;
-        this.shadowRoot.appendChild(style);
-      });
+    this.container = document.createElement("div");
+    this.container.classList.add("notes-list-container");
+    this.shadowRoot.appendChild(this.container);
 
     this.render();
+  }
+
+  async loadStyles() {
+    const response = await fetch("components/NotesList/styles.css");
+    const css = await response.text();
+    const style = document.createElement("style");
+    style.textContent = css;
+    this.shadowRoot.appendChild(style);
   }
 
   getNotes() {
@@ -19,29 +24,28 @@ class NotesList extends HTMLElement {
   }
 
   render() {
-    const container = document.createElement("div");
-    container.classList.add("notes-list-container");
+    while (this.container.firstChild) {
+      this.container.removeChild(this.container.firstChild);
+    }
 
     this.newNoteForm = document.createElement("add-new-note");
     this.newNoteForm.style.display = "none";
-    container.appendChild(this.newNoteForm);
+    this.container.appendChild(this.newNoteForm);
 
     const notes = this.getNotes();
 
     if (notes.length > 0) {
       this.addNewNoteBtn = this.createAddNewNoteButton();
-      container.appendChild(this.addNewNoteBtn);
+      this.container.appendChild(this.addNewNoteBtn);
 
       notes.forEach((note) => {
         const noteElement = this.createNoteElement(note);
-        container.appendChild(noteElement);
+        this.container.appendChild(noteElement);
       });
     } else {
       this.emptyList = document.createElement("empty-list");
-      container.appendChild(this.emptyList);
+      this.container.appendChild(this.emptyList);
     }
-
-    this.shadowRoot.appendChild(container);
   }
 
   createAddNewNoteButton() {
@@ -75,7 +79,20 @@ class NotesList extends HTMLElement {
     noteElement.setAttribute("content", note.content);
     noteElement.setAttribute("id", note.noteId);
     noteElement.setAttribute("timestamp", note.timestamp);
+
+    noteElement.editNoteCallback = () => this.editNote(note);
+
     return noteElement;
+  }
+
+  editNote(note) {
+    if (this.emptyList) {
+      this.emptyList.remove();
+    }
+
+    this.newNoteForm.style.display = "block";
+    this.newNoteForm.setNoteData(note);
+    this.addNewNoteBtn.style.display = "none";
   }
 }
 

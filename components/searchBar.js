@@ -1,8 +1,8 @@
 class SearchBar extends HTMLElement {
-    constructor() {
-        super()
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.innerHTML = `
             <style>
                 input {
                     padding: 8px 12px;
@@ -21,19 +21,32 @@ class SearchBar extends HTMLElement {
                     background-position: left 10px center;
                     margin-bottom: 24px;
                 }
+
+                    input:hover {
+                        background-color: #DCDEE0;
+                    }
+
+                    input:focus{
+                        background-color: #FFF;
+                        outline-color: #000;
+                    }
             </style>
             <input type="text" id="search-input" placeholder="Search notes...">
         `;
 
-        this.shadowRoot.querySelector('#search-input').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            this.dispatchEvent(new CustomEvent('search', {
-                detail: query,
-                bubbles: true,
-                composed: true
-            }));
-        });
-    }
+    this.shadowRoot
+      .querySelector("#search-input")
+      .addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase();
+        this.dispatchEvent(
+          new CustomEvent("search", {
+            detail: query,
+            bubbles: true,
+            composed: true,
+          })
+        );
+      });
+  }
 }
 
-customElements.define('search-bar', SearchBar)
+customElements.define("search-bar", SearchBar);

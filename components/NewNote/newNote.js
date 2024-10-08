@@ -17,6 +17,9 @@ class NewNote extends HTMLElement {
         this.shadowRoot.innerHTML += html;
         this.insertFields();
       });
+
+    this.isEditMode = false;
+    this.noteId = null;
   }
 
   insertFields() {
@@ -33,10 +36,17 @@ class NewNote extends HTMLElement {
       saveBtn.addEventListener("click", () => {
         const title = inputField.value;
         const content = textareaField.value;
+
         if (title && content) {
-          const noteId = Math.floor(Math.random() * 1000000 + 1);
           const timestamp = Date.now();
-          this.saveNote({ title, content, noteId, timestamp });
+
+          if (this.isEditMode) {
+            this.updateNote({ title, content, noteId: this.noteId, timestamp });
+          } else {
+            const noteId = Math.floor(Math.random() * 1000000 + 1);
+            this.saveNote({ title, content, noteId, timestamp });
+          }
+
           inputField.value = "";
           textareaField.value = "";
           this.hideNewNoteForm();
@@ -46,6 +56,8 @@ class NewNote extends HTMLElement {
       });
 
       cancelBtn.addEventListener("click", () => {
+        inputField.value = "";
+        textareaField.value = "";
         this.hideNewNoteForm();
       });
     }
@@ -59,6 +71,38 @@ class NewNote extends HTMLElement {
     const notes = this.getNotes();
     notes.push(note);
     localStorage.setItem("notes", JSON.stringify(notes));
+
+    const notesList = document.querySelector("notes-list");
+    if (notesList) {
+      notesList.render();
+    }
+  }
+
+  updateNote(updatedNote) {
+    const notes = this.getNotes();
+    const noteIndex = notes.findIndex(
+      (note) => note.noteId === updatedNote.noteId
+    );
+    if (noteIndex !== -1) {
+      notes[noteIndex] = updatedNote;
+      localStorage.setItem("notes", JSON.stringify(notes));
+
+      const notesList = document.querySelector("notes-list");
+      if (notesList) {
+        notesList.render();
+      }
+    }
+  }
+
+  setNoteData({ title, content, noteId }) {
+    this.isEditMode = true;
+    this.noteId = noteId;
+
+    const inputField = this.shadowRoot.querySelector("note-input-field");
+    const textareaField = this.shadowRoot.querySelector("note-textarea-field");
+
+    inputField.value = title;
+    textareaField.value = content;
   }
 
   hideNewNoteForm() {
