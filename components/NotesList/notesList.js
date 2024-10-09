@@ -91,6 +91,11 @@ class NotesList extends HTMLElement {
 
     this.addNewNoteBtn.style.display = "none";
     this.newNoteForm.style.display = "block";
+    const headerTitle =
+      this.newNoteForm.shadowRoot.querySelector(".header-title");
+    if (headerTitle) {
+      headerTitle.textContent = "Add New Note";
+    }
   }
 
   showAddNewButton() {
@@ -120,7 +125,15 @@ class NotesList extends HTMLElement {
 
     this.newNoteForm.style.display = "block";
     this.newNoteForm.setNoteData(note);
+
+    const headerTitle =
+      this.newNoteForm.shadowRoot.querySelector(".header-title");
+    if (headerTitle) {
+      headerTitle.textContent = "Edit Note";
+    }
+
     this.addNewNoteBtn.style.display = "none";
+    this.newNoteForm.scrollIntoView();
   }
 
   confirmDeleteNote(note) {

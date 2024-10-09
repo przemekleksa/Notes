@@ -35,6 +35,15 @@ class TextArea extends HTMLElement {
 
     this.shadowRoot.appendChild(style);
     this.shadowRoot.appendChild(textarea);
+
+    textarea.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        this.dispatchEvent(
+          new CustomEvent("save-note", { bubbles: true, composed: true })
+        );
+      }
+    });
   }
 
   get value() {
