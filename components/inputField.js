@@ -34,6 +34,15 @@ class InputField extends HTMLElement {
     `;
     this.shadowRoot.appendChild(style);
     this.shadowRoot.appendChild(input);
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        this.dispatchEvent(
+          new CustomEvent("save-note", { bubbles: true, composed: true })
+        );
+      }
+    });
   }
   get value() {
     return this.shadowRoot.querySelector("input").value;

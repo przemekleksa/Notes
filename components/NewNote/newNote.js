@@ -39,7 +39,7 @@ class NewNote extends HTMLElement {
       this.error.style.display = "none";
       container.insertBefore(this.error, saveBtn);
 
-      saveBtn.addEventListener("click", () => {
+      const saveNote = () => {
         const title = inputField.value;
         const content = textareaField.value;
 
@@ -60,7 +60,13 @@ class NewNote extends HTMLElement {
           this.error.textContent = "Please fill in both fields";
           this.error.style.display = "block";
         }
-      });
+      };
+
+      saveBtn.addEventListener("click", saveNote);
+
+      textareaField.addEventListener("save-note", saveNote);
+      inputField.addEventListener("save-note", saveNote);
+
       [inputField, textareaField].forEach((field) => {
         field.addEventListener("input", () => {
           if (inputField.value && textareaField.value) {
@@ -72,6 +78,7 @@ class NewNote extends HTMLElement {
       cancelBtn.addEventListener("click", () => {
         inputField.value = "";
         textareaField.value = "";
+        this.error.style.display = "none";
         this.hideNewNoteForm();
       });
     }

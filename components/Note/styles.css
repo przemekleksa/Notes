@@ -23,6 +23,7 @@
     margin-right: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .note .header .icons {
@@ -32,6 +33,7 @@
 
 .note .header .icons img {
     cursor: pointer;
+    max-height: 24px
 }
 
 .note p {
@@ -42,8 +44,9 @@
     color: #3B3C3E;
     overflow: hidden;
     text-overflow: ellipsis;
-    overflow-wrap: break-word;
-    white-space: normal;
+    /* overflow-wrap: break-word;
+    white-space: normal; */
+
 }
 
 .note .date {
