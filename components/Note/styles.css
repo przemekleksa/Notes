@@ -6,6 +6,7 @@
     gap: 12px;
     border-radius: 12px;
     box-shadow: 0px 4px 16px 0px #00000012;
+
 }
 
 .note .header {
@@ -13,12 +14,15 @@
     justify-content: space-between;
 }
 
-.note .header h3 {
+.note .header div:first-child {
     margin: 0;
     font-size: 14px;
     font-weight: 500;
     line-height: 23.8px;
     color: #1B1C1E;
+    margin-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .note .header .icons {
@@ -36,6 +40,10 @@
     font-weight: 400;
     line-height: 23.8px;
     color: #3B3C3E;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .note .date {
