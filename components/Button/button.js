@@ -4,11 +4,12 @@ class Button extends HTMLElement {
     this.attachShadow({ mode: "open" });
     this.isSecondary = false;
     this.label = "";
-    this.fullWidth = false;
+    this.fullwidth = false;
+    this.isTertiary = false;
   }
 
   static get observedAttributes() {
-    return ["secondary", "label", "fullWidth"];
+    return ["secondary", "label", "fullwidth", "tertiary"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -16,15 +17,20 @@ class Button extends HTMLElement {
       this.isSecondary = newValue !== null;
       this.loadTemplateAndStyles();
     }
+    if (name === "tertiary") {
+      this.isTertiary = newValue !== null;
+      this.loadTemplateAndStyles();
+    }
 
     if (name === "label") {
       this.label = newValue || "";
+      console.log("first");
       this.updateLabel();
     }
 
-    if (name === "fullWidth") {
-      this.fullWidth = newValue !== null;
-      this.updateFullWidth;
+    if (name === "fullwidth") {
+      this.fullwidth = newValue !== null;
+      this.updateFullWidth();
     }
   }
 
@@ -33,12 +39,23 @@ class Button extends HTMLElement {
   }
 
   loadTemplateAndStyles() {
-    const templateFile = this.isSecondary
-      ? "components/Button/templateSecondary.html"
-      : "components/Button/template.html";
-    const stylesFile = this.isSecondary
-      ? "components/Button/stylesSecondary.css"
-      : "components/Button/styles.css";
+    const templateFile =
+      this.isSecondary || this.isTertiary
+        ? "components/Button/templateSecondary.html"
+        : "components/Button/template.html";
+
+    let stylesFile;
+    switch (true) {
+      case this.isSecondary:
+        stylesFile = "components/Button/stylesSecondary.css";
+        break;
+      case this.isTertiary:
+        stylesFile = "components/Button/stylesTertiary.css";
+        break;
+      default:
+        stylesFile = "components/Button/styles.css";
+        break;
+    }
 
     this.loadTemplate(templateFile);
     this.loadStyles(stylesFile);
@@ -77,8 +94,8 @@ class Button extends HTMLElement {
     const labelElement = this.shadowRoot.querySelector(".label");
 
     if (buttonElement && labelElement) {
-      buttonElement.style.width = this.fullWidth ? "" : "100%";
-      labelElement.style.width = this.fullWidth ? "" : "100%";
+      buttonElement.style.width = this.fullwidth ? "100%" : "";
+      labelElement.style.width = this.fullwidth ? "100%" : "";
     }
   }
 }

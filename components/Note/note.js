@@ -39,7 +39,7 @@ class Note extends HTMLElement {
       "December",
     ];
     const day = String(date.getDate()).padStart(2, "0");
-    const month = months[String(date.getMonth() + 1)];
+    const month = months[date.getMonth()];
     return `${month} ${day}`;
   }
 
@@ -71,6 +71,11 @@ class Note extends HTMLElement {
     const removeIcon = document.createElement("img");
     removeIcon.src = "assets/remove.svg";
     removeIcon.alt = "remove note";
+    removeIcon.addEventListener("click", () => {
+      if (this.removeNoteCallback) {
+        this.removeNoteCallback();
+      }
+    });
 
     icons.appendChild(editIcon);
     icons.appendChild(removeIcon);

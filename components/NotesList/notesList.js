@@ -50,9 +50,9 @@ class NotesList extends HTMLElement {
 
   createAddNewNoteButton() {
     const addNewNoteBtn = document.createElement("custom-button");
-    addNewNoteBtn.setAttribute("secondary", true);
+    addNewNoteBtn.setAttribute("secondary", "");
     addNewNoteBtn.setAttribute("label", "Add New");
-    addNewNoteBtn.setAttribute("fullWidth", true);
+    addNewNoteBtn.setAttribute("fullwidth", "");
     addNewNoteBtn.addEventListener("click", () => this.showNewNoteForm());
     return addNewNoteBtn;
   }
@@ -81,6 +81,7 @@ class NotesList extends HTMLElement {
     noteElement.setAttribute("timestamp", note.timestamp);
 
     noteElement.editNoteCallback = () => this.editNote(note);
+    noteElement.removeNoteCallback = () => this.confirmDeleteNote(note);
 
     return noteElement;
   }
@@ -93,6 +94,78 @@ class NotesList extends HTMLElement {
     this.newNoteForm.style.display = "block";
     this.newNoteForm.setNoteData(note);
     this.addNewNoteBtn.style.display = "none";
+  }
+
+  confirmDeleteNote(note) {
+    this.showDeleteModal(note);
+  }
+
+  showDeleteModal(note) {
+    const overlay = document.createElement("div");
+    overlay.classList.add("modal-overlay");
+    overlay.addEventListener("click", () => this.hideDeleteModal(overlay));
+
+    const modal = document.createElement("div");
+    modal.classList.add("modal");
+
+    const title = document.createElement("h2");
+    title.textContent = "Delete Note";
+
+    const subtitle = document.createElement("p");
+    subtitle.textContent = "Are you sure you want to delete this note?";
+
+    const buttons = document.createElement("div");
+    buttons.classList.add("buttons");
+
+    const cancelButton = this.createModalButton("Cancel", () =>
+      this.hideDeleteModal(overlay)
+    );
+    cancelButton.setAttribute("tertiary", "");
+    cancelButton.setAttribute("fullwidth", "");
+    cancelButton.classList.add("cancelBtn");
+
+    const deleteButton = this.createModalButton("Delete", () => {
+      this.removeNote(note);
+      this.hideDeleteModal(overlay);
+    });
+    deleteButton.setAttribute("secondary", "");
+    deleteButton.setAttribute("fullwidth", "");
+    deleteButton.classList.add("deleteBtn");
+
+    buttons.appendChild(cancelButton);
+    buttons.appendChild(deleteButton);
+
+    modal.appendChild(title);
+    modal.appendChild(subtitle);
+    modal.appendChild(buttons);
+    overlay.appendChild(modal);
+
+    this.shadowRoot.appendChild(overlay);
+  }
+
+  createModalButton(label, onClick) {
+    const button = document.createElement("custom-button");
+    button.setAttribute("label", label);
+    button.setAttribute("fullwidth", "");
+    button.addEventListener("click", onClick);
+    return button;
+  }
+
+  hideDeleteModal(overlay) {
+    overlay.remove();
+    const modal = this.shadowRoot.querySelector(".modal");
+    if (modal) {
+      modal.remove();
+    }
+  }
+
+  removeNote(note) {
+    const notes = this.getNotes();
+    const newNotes = notes.filter(
+      (noteItem) => noteItem.noteId !== note.noteId
+    );
+    localStorage.setItem("notes", JSON.stringify(newNotes));
+    this.render();
   }
 }
 
