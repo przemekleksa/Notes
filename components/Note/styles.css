@@ -26,6 +26,10 @@
     gap: 8px;
 }
 
+.note .header .icons img {
+    cursor: pointer;
+}
+
 .note p {
     margin: 0;
     font-size: 14px;

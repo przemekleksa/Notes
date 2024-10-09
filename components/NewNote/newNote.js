@@ -110,6 +110,11 @@ class NewNote extends HTMLElement {
     const notesList = document.querySelector("notes-list");
     if (notesList) {
       notesList.showAddNewButton();
+      const notes = notesList.getNotes();
+      if (notes.length === 0) {
+        const emptyList = document.createElement("empty-list");
+        notesList.container.appendChild(emptyList);
+      }
     }
   }
 }
