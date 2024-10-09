@@ -80,6 +80,7 @@ class NotesList extends HTMLElement {
     addNewNoteBtn.setAttribute("secondary", "");
     addNewNoteBtn.setAttribute("label", "Add New");
     addNewNoteBtn.setAttribute("fullwidth", "");
+    addNewNoteBtn.style.marginBlockEnd = "8px";
     addNewNoteBtn.addEventListener("click", () => this.showNewNoteForm());
     return addNewNoteBtn;
   }

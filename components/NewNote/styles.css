@@ -4,6 +4,7 @@
     gap: 16px;
     box-shadow: 0px 0px 16px 0px #00000014;
     padding: 20px 16px;
+    margin-block-end: 8px;
 }
 
 .newNote .header {
