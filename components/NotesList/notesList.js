@@ -9,6 +9,9 @@ class NotesList extends HTMLElement {
     this.shadowRoot.appendChild(this.container);
 
     this.render();
+
+    this.handleSearch = this.handleSearch.bind(this);
+    document.addEventListener("search", this.handleSearch);
   }
 
   async loadStyles() {
@@ -23,7 +26,7 @@ class NotesList extends HTMLElement {
     return JSON.parse(localStorage.getItem("notes")) || [];
   }
 
-  render() {
+  render(filteredNotes = null) {
     while (this.container.firstChild) {
       this.container.removeChild(this.container.firstChild);
     }
@@ -32,7 +35,7 @@ class NotesList extends HTMLElement {
     this.newNoteForm.style.display = "none";
     this.container.appendChild(this.newNoteForm);
 
-    const notes = this.getNotes();
+    const notes = filteredNotes !== null ? filteredNotes : this.getNotes();
 
     if (notes.length > 0) {
       this.addNewNoteBtn = this.createAddNewNoteButton();
@@ -43,9 +46,33 @@ class NotesList extends HTMLElement {
         this.container.appendChild(noteElement);
       });
     } else {
-      this.emptyList = document.createElement("empty-list");
-      this.container.appendChild(this.emptyList);
+      if (filteredNotes !== null) {
+        const noResultsMessage = document.createElement("div");
+        noResultsMessage.classList.add("no-results-message");
+        noResultsMessage.textContent =
+          "No notes found matching your search criteria";
+        this.container.appendChild(noResultsMessage);
+      } else {
+        this.emptyList = document.createElement("empty-list");
+        this.container.appendChild(this.emptyList);
+      }
     }
+  }
+
+  handleSearch(event) {
+    const query = event.detail;
+
+    if (query === "") {
+      this.render();
+      return;
+    }
+
+    const filteredNotes = this.getNotes().filter(
+      (note) =>
+        note.title.toLowerCase().includes(query) ||
+        note.content.toLowerCase().includes(query)
+    );
+    this.render(filteredNotes);
   }
 
   createAddNewNoteButton() {

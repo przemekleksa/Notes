@@ -24,7 +24,6 @@ class Button extends HTMLElement {
 
     if (name === "label") {
       this.label = newValue || "";
-      console.log("first");
       this.updateLabel();
     }
 
